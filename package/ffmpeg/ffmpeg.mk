@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-FFMPEG_VERSION = 3.4.2
+FFMPEG_VERSION = 4.1.3
 FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
 FFMPEG_SITE = http://ffmpeg.org/releases
 FFMPEG_INSTALL_STAGING = YES
@@ -49,7 +49,6 @@ FFMPEG_CONF_OPTS = \
 	--disable-frei0r \
 	--disable-libopencore-amrnb \
 	--disable-libopencore-amrwb \
-	--disable-libcdio \
 	--disable-libdc1394 \
 	--disable-libgsm \
 	--disable-libilbc \
@@ -85,12 +84,6 @@ else
 FFMPEG_CONF_OPTS += --disable-ffplay
 endif
 
-ifeq ($(BR2_PACKAGE_FFMPEG_FFSERVER),y)
-FFMPEG_CONF_OPTS += --enable-ffserver
-else
-FFMPEG_CONF_OPTS += --disable-ffserver
-endif
-
 ifeq ($(BR2_PACKAGE_FFMPEG_AVRESAMPLE),y)
 FFMPEG_CONF_OPTS += --enable-avresample
 else
@@ -118,6 +111,10 @@ endif
 ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_ENCODERS)),all)
 FFMPEG_CONF_OPTS += --disable-encoders \
 	$(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_ENCODERS)),--enable-encoder=$(x))
+endif
+
+ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_DISABLE_DECODERS)),)
+FFMPEG_CONF_OPTS += $(foreach x,$(call qstrip,$(BR2_PACKAGE_FFMPEG_DISABLE_DECODERS)),--disable-encoder=$(x))
 endif
 
 ifneq ($(call qstrip,$(BR2_PACKAGE_FFMPEG_DECODERS)),all)
@@ -203,18 +200,25 @@ else
 FFMPEG_CONF_OPTS += --disable-libfdk-aac
 endif
 
+ifeq ($(BR2_PACKAGE_FFMPEG_GPL)$(BR2_PACKAGE_LIBCDIO_PARANOIA),yy)
+FFMPEG_CONF_OPTS += --enable-libcdio
+FFMPEG_DEPENDENCIES += libcdio-paranoia
+else
+FFMPEG_CONF_OPTS += --disable-libcdio
+endif
+
 ifeq ($(BR2_PACKAGE_GNUTLS),y)
 FFMPEG_CONF_OPTS += --enable-gnutls --disable-openssl
 FFMPEG_DEPENDENCIES += gnutls
 else
 FFMPEG_CONF_OPTS += --disable-gnutls
-ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
+ifeq ($(BR2_PACKAGE_OPENSSL),y)
 # openssl isn't license compatible with GPL
 ifeq ($(BR2_PACKAGE_FFMPEG_GPL)x$(BR2_PACKAGE_FFMPEG_NONFREE),yx)
 FFMPEG_CONF_OPTS += --disable-openssl
 else
 FFMPEG_CONF_OPTS += --enable-openssl
-FFMPEG_DEPENDENCIES += libopenssl
+FFMPEG_DEPENDENCIES += openssl
 endif
 else
 FFMPEG_CONF_OPTS += --disable-openssl
@@ -223,6 +227,13 @@ endif
 
 ifeq ($(BR2_PACKAGE_FFMPEG_GPL)$(BR2_PACKAGE_LIBEBUR128),yy)
 FFMPEG_DEPENDENCIES += libebur128
+endif
+
+ifeq ($(BR2_PACKAGE_LIBDRM),y)
+FFMPEG_CONF_OPTS += --enable-libdrm
+FFMPEG_DEPENDENCIES += libdrm
+else
+FFMPEG_CONF_OPTS += --disable-libdrm
 endif
 
 ifeq ($(BR2_PACKAGE_LIBOPENH264),y)
@@ -318,6 +329,13 @@ FFMPEG_CONF_OPTS += --enable-libbluray
 FFMPEG_DEPENDENCIES += libbluray
 else
 FFMPEG_CONF_OPTS += --disable-libbluray
+endif
+
+ifeq ($(BR2_PACKAGE_INTEL_MEDIASDK),y)
+FFMPEG_CONF_OPTS += --enable-libmfx
+FFMPEG_DEPENDENCIES += intel-mediasdk
+else
+FFMPEG_CONF_OPTS += --disable-libmfx
 endif
 
 ifeq ($(BR2_PACKAGE_RTMPDUMP),y)
@@ -493,6 +511,11 @@ FFMPEG_CONF_OPTS += --disable-mipsfpu
 else
 FFMPEG_CONF_OPTS += --enable-mipsfpu
 endif
+
+# Fix build failure on "addi opcode not supported"
+ifeq ($(BR2_mips_32r6)$(BR2_mips_64r6),y)
+FFMPEG_CONF_OPTS += --disable-asm
+endif
 endif # MIPS
 
 ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
@@ -516,12 +539,20 @@ endif
 # warning from ffmpeg's configure script.
 ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
 FFMPEG_CONF_OPTS += --cpu=generic
-else ifneq ($(call qstrip,$(BR2_GCC_TARGET_CPU)),)
-FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_CPU)
-else ifneq ($(call qstrip,$(BR2_GCC_TARGET_ARCH)),)
-FFMPEG_CONF_OPTS += --cpu=$(BR2_GCC_TARGET_ARCH)
+else ifneq ($(GCC_TARGET_CPU),)
+FFMPEG_CONF_OPTS += --cpu="$(GCC_TARGET_CPU)"
+else ifneq ($(GCC_TARGET_ARCH),)
+FFMPEG_CONF_OPTS += --cpu="$(GCC_TARGET_ARCH)"
 endif
 
+FFMPEG_CFLAGS = $(TARGET_CFLAGS)
+
+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
+FFMPEG_CONF_OPTS += --disable-optimizations
+FFMPEG_CFLAGS += -O0
+endif
+
+FFMPEG_CONF_ENV += CFLAGS="$(FFMPEG_CFLAGS)"
 FFMPEG_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
 
 # Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
