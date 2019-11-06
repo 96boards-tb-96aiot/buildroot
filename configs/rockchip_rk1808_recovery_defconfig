@@ -2,3 +2,8 @@
 #include "base.config"
 #include "base_extra.config"
 #include "recovery.config"
+BR2_PACKAGE_RECOVERY=y #开启升级相关功能
+BR2_PACKAGE_RECOVERY_USE_UPDATEENGINE=y #使用新升级程序，不配置则默认使用原有升级流程
+BR2_PACKAGE_RECOVERY_RECOVERYBIN=y #开启recovery bin 文件
+BR2_PACKAGE_RECOVERY_UPDATEENGINEBIN=y #编译新升级程序
+BR2_PACKAGE_RECOVERY_NO_UI=y
