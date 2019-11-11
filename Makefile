@@ -747,9 +747,12 @@ endif
 	) >  $(TARGET_DIR)/usr/lib/os-release
 	ln -sf ../usr/lib/os-release $(TARGET_DIR)/etc
 	( \
-		echo "RK_MODEL=$(RK_MODEL)"; \
-		echo "RK_VERSION=$(RK_VERSION)"; \
-		echo "RK_OTA_HOST=$(RK_OTA_HOST)"; \
+		echo "packagename=$(PACKAGE_NAME)"; \
+		echo "model=$(MODEL_NAME)"; \
+		echo "buildid=$(BUILD_ID)"; \
+		echo "manufacturer=$(PRODUCT_MANUFACTURER)"; \
+		echo "locale=$(PRODUCT_LOCALES)"; \
+		echo "buildtime=`date -R`"; \
 	) >  $(TARGET_DIR)/etc/version
 
 	@$(call MESSAGE,"Sanitizing RPATH in target tree")
