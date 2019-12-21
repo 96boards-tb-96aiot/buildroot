@@ -1,0 +1,45 @@
+# /etc/ppp/peers/Neoway-pppdial
+# Usage:root@neoway:~# pppd call Neoway-pppdial
+# Hide password in debug messages
+hide-password
+# The phone is not required to authenticate
+noauth
+# The chat script (be sure to edit that file,too!)
+connect '/usr/sbin/chat -s -v -f /etc/ppp/peers/Neoway-chat-connect'
+# The close script(be sure to edit that file,too!)
+disconnect '/usr/sbin/chat -s -v -f /etc/ppp/peers/Neoway-chat-disconnect'
+# Debug info from pppd
+debug
+# Modem path, like /dev/ttyUSB0, /dev/ttyACM0
+/dev/ttyUSB2
+# Serial port line speed
+115200
+# If you want to use the link as your gateway
+#defaultroute
+# pppd must not propose any IP address to the peer
+noipdefault
+# No ppp compression
+novj
+novjccomp
+noccp
+ipcp-accept-local
+ipcp-accept-remote
+local
+usepeerdns
+# For sanity, keep a lock on the serial line
+lock
+dump
+# Keep pppd attached to the terminal
+# Comment this to get daemon mode pppd
+nodetach
+#insert here the correct username and password for authentication
+user
+password
+# Hardware flow control
+crtscts
+
+remotename 3gppp
+ipparam 3gppp
+# Ask the peer for up to 2 DNS server addresses
+# usepeerdns
+

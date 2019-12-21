@@ -1,0 +1,111 @@
+#!/bin/sh
+pppd_log=/tmp/pppd.log
+finish_file=/tmp/pppd_finish
+wait_ttyUSB()
+{
+	while [ true ]; do
+		if [ -f $finish_file ]; then
+			break
+		fi
+
+		if [ -c /dev/ttyUSB2 ]; then
+			break
+		fi
+		usleep 100
+	done
+}
+wait_ppp0()
+{
+	count=1
+	while [ true ]; do
+		if ifconfig |grep ppp0 >/dev/null; then
+			return 0
+		fi
+		sleep 1
+     		let count=$count+1
+		if [ $count -eq 60 ]; then
+			return 1
+		fi
+	done
+}
+get_dns()
+{
+	tail -n 2 $pppd_log | while read line
+	do
+		dns_add=`echo $line | awk -F ' DNS address ' '{print $2}'`
+
+		if [ -n "$dns_add" ]; then
+			#if ping -s 1 -c 2 $dns_add -I ppp0 > /dev/null; then
+			#fi
+			echo "nameserver ${dns_add}" >> /etc/resolv.conf
+		else
+			return 1
+		fi
+	done
+	return 0
+}
+jugde_pppdret()
+{
+	if [ $1 -eq 0 ]; then
+		echo "pppd $2 ok!"
+		return 0
+	else
+		echo "pppd $2 error!!"
+		killall pppd
+		return 1
+	fi
+}
+start_pppd()
+{
+	wait_ttyUSB
+	sleep 10
+
+	cd /etc/ppp/peers
+	while [ true ]; do
+		if [ -f $finish_file ]; then
+			break
+		fi
+	
+		pppd call Neoway-pppdial >> $pppd_log 2>&1 &
+	
+		wait_ppp0
+		jugde_pppdret $? "get interface ppp0"
+		if [ $? -ne 0 ]; then
+			continue
+		else
+			break
+		fi
+
+		#get_dns
+		#jugde_pppdret $? "get dns"
+		#if [ $? -eq 0 ]; then
+		#	route add default dev ppp0  metric 1000 
+		#	break
+		#fi
+		
+		sleep 60
+	done
+	cd - >> /dev/null
+}
+
+case "$1" in
+	start)
+		printf "Starting pppd: "
+		rm $finish_file >> /dev/null 2>&1
+		start_pppd &
+		;;
+	stop)
+		printf "Stopping pppd: "
+		echo "">$finish_file
+		killall pppd
+		;;
+	restart|reload)
+		$0 stop
+		$0 start
+		;;
+	*)
+		echo "Usage: $0 {start|stop|restart}"
+		exit 1
+esac
+
+exit 0
