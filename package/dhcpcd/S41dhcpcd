@@ -6,6 +6,7 @@
 DAEMON=/sbin/dhcpcd
 CONFIG=/etc/dhcpcd.conf
 PIDFILE=/var/run/dhcpcd.pid
+RESOLVCONF=/sbin/resolvconf
 
 [ -x $DAEMON ] || exit 0
 [ -f $CONFIG ] || exit 0
@@ -13,6 +14,9 @@ PIDFILE=/var/run/dhcpcd.pid
 case "$1" in
   start)
 	echo "Starting dhcpcd..."
+	if type "$RESOLVCONF" >/dev/null 2>&1; then
+		$RESOLVCONF --enable-updates
+	fi
 	start-stop-daemon -S -x "$DAEMON" -p "$PIDFILE" -- -f "$CONFIG"
 	;;
   stop)

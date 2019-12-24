@@ -39,6 +39,9 @@ endef
 define DHCPCD_INSTALL_INIT_SYSV
 	$(INSTALL) -m 755 -D package/dhcpcd/S41dhcpcd \
 		$(TARGET_DIR)/etc/init.d/S41dhcpcd
+	test -f $(TARGET_DIR)/lib/dhcpcd/dhcpcd-run-hooks && chmod a+x $(TARGET_DIR)/lib/dhcpcd/dhcpcd-run-hooks
+	test -f $(TARGET_DIR)/lib/dhcpcd/dhcpcd-hooks/20-resolv.conf && chmod a+x $(TARGET_DIR)/lib/dhcpcd/dhcpcd-hooks/20-resolv.conf
+	test -f $(TARGET_DIR)/lib/dhcpcd/dhcpcd-hooks/30-hostname && chmod a+x $(TARGET_DIR)/lib/dhcpcd/dhcpcd-hooks/30-hostname
 endef
 
 define DHCPCD_INSTALL_INIT_SYSTEMD
