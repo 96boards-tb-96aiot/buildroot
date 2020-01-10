@@ -29,7 +29,7 @@ define RKSCRIPT_INSTALL_TARGET_CMDS
 	$(INSTALL) -m 0755 -D $(@D)/waylandtest.sh $(TARGET_DIR)/usr/bin/
 	echo -e "/dev/block/by-name/misc\t\t/misc\t\t\temmc\t\tdefaults\t\t0\t0" >> $(TARGET_DIR)/etc/fstab
 	echo -e "/dev/block/by-name/oem\t\t/oem\t\t\t$$RK_OEM_FS_TYPE\t\tdefaults\t\t0\t2" >> $(TARGET_DIR)/etc/fstab
-	echo -e "/dev/block/by-name/userdata\t/userdata\t\t$$RK_USERDATA_FS_TYPE\t\tro,auto\t\t0\t2" >> $(TARGET_DIR)/etc/fstab
+	echo -e "/dev/block/by-name/userdata\t/userdata\t\t$$RK_USERDATA_FS_TYPE\t\trw,auto\t\t0\t2" >> $(TARGET_DIR)/etc/fstab
 	cd $(TARGET_DIR) && rm -rf oem userdata data mnt udisk sdcard && mkdir -p oem userdata mnt/sdcard && ln -s userdata data && ln -s media/usb0 udisk && ln -s mnt/sdcard sdcard && cd -
 	if test -e $(RKSCRIPT_USB_CONFIG_FILE) ; then \
 		rm $(RKSCRIPT_USB_CONFIG_FILE) ; \
