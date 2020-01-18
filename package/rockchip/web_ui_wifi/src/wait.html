@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>waiting resault</title>
+    <link href="css/my_bootstrap.min.css" rel="stylesheet">
+</head>
+
+<h1 align="center" style="color:gray;font-size:50px">SET UP WIFI</h1>
+
+<body background="./images/bg.jpg">
+
+<div class="my_text-center" style="color:gray;font-size:30px">Waiting for distribution network result......</div>
+<div id="set_error" class="my_text-center" style="color:red;font-size:30px" hidden>Set up network fail, please reset!!!</div>
+<div id="set_ok" class="my_text-center" style="color:orange;font-size:30px" hidden>Set up network successful!!!</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery.min.js"></script>
+<script src="js/ajax.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
+<script src="js/main.js"></script>
+<script>
+    $(document).ready(function(){
+        wait_result();
+    });
+</script>
+
+</body>
+</html>

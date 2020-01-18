@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>beiqi wifi setting</title>
+    <link href="css/my_bootstrap.min.css" rel="stylesheet">
+</head>
+
+<h1 align="center" style="color:gray;font-size:50px">SET UP WIFI</h1>
+
+<body background="./images/bg.jpg">
+
+<nav class="navbar">
+    <ul class="nav navbar-nav navbar-right">
+        <li><a class="list-group-item" role="button" data-toggle="modal" data-target="#myModal">Setting Wifi Manually</a></li>
+    </ul>
+</nav>
+
+<div class="my_panel panel-default">
+    <div id="gettext" class="panel-heading">WIFI LIST : (click the button to refresh)
+        <img id="img1" src="./images/refresh.png" width="50" height="50" border="2" hspace="20" onClick="change_wifi_list()"/>
+    </div>
+    <ul class="list-group" id="testtext"></ul>
+
+    <!-- 模态(choose one for set)-->
+    <div class="my_modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <fieldset>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon0">ssid</span>
+                            <input type="text" class="form-control" placeholder="please enter ssid here" aria-describedby="basic-addon1" id="modal_ssid">
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">pwd</span>
+                        <input type="text" class="form-control" placeholder="please enter password here" aria-describedby="basic-addon1" id="modal_pwd">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">cancel</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="set_wifi_by_modal_input()">connect</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery.min.js"></script>
+<script src="js/ajax.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
+<script src="js/main.js"></script>
+<script>
+    $(document).ready(function(){
+         get_wifi_list();
+    });
+</script>
+
+</body>
+</html>
