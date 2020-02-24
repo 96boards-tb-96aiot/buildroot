@@ -5,10 +5,11 @@
 
 # Debian ifupdown needs the /run/network lock directory
 mkdir -p /run/network
-
+SETUP_IP=192.168.168.168/24
 case "$1" in
   start)
 	printf "Starting network: "
+	ip a add $SETUP_IP dev eth0
 	/sbin/ifup -a
 	[ $? = 0 ] && echo "OK" || echo "FAIL"
 	;;
