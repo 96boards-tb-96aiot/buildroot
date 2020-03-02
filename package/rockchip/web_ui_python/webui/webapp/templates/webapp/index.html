@@ -1,0 +1,243 @@
+{%extends "webapp/base.html"%}
+{% load staticfiles %}
+{%block content%}
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+            <h3 class="text-themecolor m-b-0 m-t-0">Bearkey-iF500</h3>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <!-- Row -->
+    <div class="row">
+        <!-- Column -->
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="text-themecolor m-b-0 m-t-0">CPU Freq</h4>
+                    <div class="text-right">
+                        <h2 class="font-light m-b-0">{{cpufreq}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="text-themecolor m-b-0 m-t-0">NPU Freq</h4>
+                    <div class="text-right">
+                        <h2 class="font-light m-b-0">{{npufreq}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="text-themecolor m-b-0 m-t-0">CPU Used</h4>
+                    <div class="text-right">
+                        <h2 class="font-light m-b-0">{{cpuload}}%</h2>
+                        <span class="text-muted">Total 100%</span>
+                    </div>
+                    <span name="changepro2" class="text-success">{{cpuload}}%</span>
+                    <div class="progress">
+                        <div name="changepro" class="progress-bar bg-success" role="progressbar" style="width: {{cpuload}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+        <!-- Column -->
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="text-themecolor m-b-0 m-t-0">Memory Used</h4>
+                    <div class="text-right">
+                        <h2 class="font-light m-b-0">{{ddrused}}</h2>
+                        <span class="text-muted">Capacity {{ddrcap}}</span>
+                    </div>
+                    <span name="changepro2" class="text-danger">{{ddrload}}%</span>
+                    <div class="progress">
+                        <div name="changepro" class="progress-bar bg-danger" role="progressbar" style="width: {{ddrload}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+        <!-- Column -->
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="text-themecolor m-b-0 m-t-0">Storage Used</h4>
+                    <div class="text-right">
+                        <h2 class="font-light m-b-0">{{emmcused}}</h2>
+                        <span class="text-muted">Capacity {{emmccap}}</span>
+                    </div>
+                    <span name="changepro2" class="text-info">{{emmcload}}%</span>
+                    <div class="progress">
+                        <div name="changepro" class="progress-bar bg-info" role="progressbar" style="width: {{emmcload}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+        <!-- Column -->
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="text-themecolor m-b-0 m-t-0">Temperature</h4>
+                    <div class="text-right">
+                        <h2 class="font-light m-b-0">{{currtemp}}&#8451;</h2>
+                        <span class="text-muted">Critical {{criticaltemp}}&#8451;</span>
+                    </div>
+                    <span name="changepro2" class="text-info">{{tempload}}%</span>
+                    <div class="progress">
+                        <div name="changepro" class="progress-bar bg-info" role="progressbar" style="width: {{tempload}}%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+    </div>
+<!--     <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="text-themecolor m-b-0 m-t-0">Host</h4>
+                    <hr>
+                    <br>
+                    <div>Host System Type:&nbsp;&nbsp;<span style="color:#84C1FF;">Linux/Windows</span></div>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div> -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="text-themecolor m-b-0 m-t-0">Vendor</h4>
+                    <hr>
+                    <br>
+                    <div>SN:&nbsp;&nbsp;<span style="color:#84C1FF;">{{manufactureid}}</span></div>
+                    <hr>
+                    <br>
+                    <div>MAC:&nbsp;&nbsp;<span style="color:#84C1FF;">{{mac}}</span></div>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+
+{#    <div class="row">#}
+{#        <div class="col-12">#}
+{#            <div class="card">#}
+{#                <div class="card-block">#}
+{#                    <h4 class="text-themecolor m-b-0 m-t-0">Work Mode</h4>#}
+{#                    <hr>#}
+{#                    <br>#}
+{#                    <div>Work Mode:&nbsp;&nbsp;<span style="color:#84C1FF;">{{mymode}}</span></div>#}
+{#                </div>#}
+{#                <br>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="row">#}
+{#        <div class="col-12">#}
+{#            <div class="card">#}
+{#                <div class="card-block">#}
+{#                    <h4 class="text-themecolor m-b-0 m-t-0">Usb Function</h4>#}
+{#                    <hr>#}
+{#                    <br>#}
+{#                    <div>Function:&nbsp;&nbsp;<span style="color:#84C1FF;">{{usb_info}}</span></div>#}
+{#                </div>#}
+{#                <br>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="row">#}
+{#        <div class="col-12">#}
+{#            <div class="card">#}
+{#                <div class="card-block">#}
+{#                    <h4 class="text-themecolor m-b-0 m-t-0">RKNN Version</h4>#}
+{#                    <hr>#}
+{#                    <br>#}
+{#                    <div>Version:&nbsp;&nbsp;<span style="color:#84C1FF;">{{rknn_info}}</span></div>#}
+{#                </div>#}
+{#                <br>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="row">#}
+{#        <div class="col-12">#}
+{#            <div class="card">#}
+{#                <div class="card-block">#}
+{#                    <h4 class="text-themecolor m-b-0 m-t-0">rootfs BaseVersion</h4>#}
+{#                    <hr>#}
+{#                    <br>#}
+{#                    <div>Version:&nbsp;&nbsp;<span style="color:#84C1FF;">{{base_version}}</span></div>#}
+{#                </div>#}
+{#                <br>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="text-themecolor m-b-0 m-t-0">Inet</h4>
+                    <hr>
+                    <br>
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IP:&nbsp;&nbsp;<span style="color:#84C1FF;">{{ip}}</span></div>
+                    <br>
+                    <div>Gateway:&nbsp;&nbsp;<span style="color:#84C1FF;">{{gateway}}</span></div>
+<!--                     <br> -->
+<!--                     <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Port:&nbsp;&nbsp;<span style="color:#84C1FF;">{{port}}</span></div> -->
+                    <br>
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DNS1:&nbsp;&nbsp;<span style="color:#84C1FF;">{{dns1}}</span></div>
+                    <br>
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DNS2:&nbsp;&nbsp;<span style="color:#84C1FF;">{{dns2}}</span></div>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+<script src="/static/assets/plugins/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var pros =  document.getElementsByName('changepro');
+        var txts =  document.getElementsByName('changepro2');
+        for(i=0;i<pros.length;i++){
+            ilength = pros[i].style.width.replace("%","");
+            console.log(ilength);
+            if(ilength<50){
+                pros[i].className = 'progress-bar bg-success';
+                txts[i].className = 'text-muted';
+            }
+            else if(ilength>=50 && ilength<80){
+                pros[i].className = 'progress-bar bg-info';
+                txts[i].className = 'text-info';
+            }
+            else if(ilength>=80){
+                pros[i].className = 'progress-bar bg-danger';
+                txts[i].className = 'text-danger';
+            }
+        }
+    });
+</script>
+{%endblock%}

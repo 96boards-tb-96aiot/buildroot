@@ -1,0 +1,105 @@
+{%extends "webapp/base.html"%}
+{% load staticfiles %}
+{%block content%}
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+            <h3 class="text-themecolor m-b-0 m-t-0">update</h3>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                <li class="breadcrumb-item active">update</li>
+            </ol>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-block">
+                    <div align="center" id="update_div">
+                        <span>update all rpm packages&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="btn pull-center hidden-sm-down btn-info" id="update">Update</a></span>
+                    </div>
+                </div>
+                <div class="card-block" align="center">
+                    <span><input type="text" id="pkg" placeholder="Package Name" required></span>
+                    &nbsp;&nbsp;
+                    <span id="install_div">
+                        <a href="#" class="btn pull-center hidden-sm-down btn-info" id="install">Install</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+            </div>
+<script src="/static/assets/plugins/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+    $("#update").click(function () {
+        d = document.getElementById("update_div");
+        d.innerHTML = '<div class="card-block" align="center">Waiting a moment ...</div><div align="center"><progress style="width:100px">您的浏览器不支持progress标签</progress></div>';
+        setTimeout(stickupdate, 100);
+});
+    function stickupdate(){
+      $.ajax({
+      type: 'GET',
+      url: "/update_ajax/",
+      data:{},
+      success: function(reponse){
+        var answer = JSON.parse(reponse);
+        var ans = answer['ans'];
+        if(ans == '0'){
+            d = document.getElementById("update_div");
+            d.innerHTML = '<div class="card-block" align="center"><span style="color:#00EC00;">Update successfully !</span></div></div>';
+        }
+        else{
+            d = document.getElementById("update_div");
+            d.innerHTML = '<div class="card-block" align="center"><span style="color:red;">Update failed !</span></div></div>';
+        }
+      },
+      error: function(xhr, type){
+        d = document.getElementById("update_div");
+        d.innerHTML = '<div class="card-block" align="center"><span style="color:red;">Update failed !</span></div></div>';
+      }
+    })
+    }
+    $("#install").click(function () {
+        d = document.getElementById("install_div");
+        d.innerHTML = '<div class="card-block" align="center">Waiting a moment ...</div><div align="center"><progress style="width:100px">您的浏览器不支持progress标签</progress></div>';
+        var pkgname = document.getElementById('pkg').value;
+        setTimeout(rpm_install, 100,pkgname);
+});
+    function rpm_install(pkgname){
+      $.ajax({
+      type: 'GET',
+      url: "/install_ajax/",
+      data:{pkgname:pkgname},
+      success: function(reponse){
+        var answer = JSON.parse(reponse);
+        var ans = answer['ans'];
+        if(ans == '0'){
+            d = document.getElementById("install_div");
+            d.innerHTML = '<div class="card-block" align="center"><span style="color:#00EC00;">Install successfully !</span></div></div>';
+        }
+        else{
+            d = document.getElementById("install_div");
+            d.innerHTML = '<div class="card-block" align="center"><span style="color:red;">Install failed !</span></div></div>';
+        }
+      },
+      error: function(xhr, type){
+        d = document.getElementById("install_div");
+        d.innerHTML = '<div class="card-block" align="center"><span style="color:red;">Install failed !</span></div></div>';
+      }
+    })
+    }
+</script>
+{%endblock%}

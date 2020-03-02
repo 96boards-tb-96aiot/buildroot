@@ -1,0 +1,95 @@
+{%extends "webapp/base.html"%}
+{% load staticfiles %}
+{%block content%}
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+            <h3 class="text-themecolor m-b-0 m-t-0">Usb Function</h3>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                <li class="breadcrumb-item active">Usb Function</li>
+            </ol>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card" style="width:50%">
+                <div class="card-block">
+                <form method="post" enctype="multipart/form-data" action="{%url 'webapp:usbfunction' %}">
+                    {% csrf_token %}
+                    <span>
+                    <div class="col-sm-8">
+                    <div>
+                        {%for item in usb_list%}
+                        {%if item in checked_list%}
+                        <label style="margin:15px"><input type="checkbox" checked=""  name="usb" value={{item}} {%if item == 'rndis' or item == 'ntb' or item == 'mass'%}disabled checked{%endif%}>&nbsp;&nbsp;{{item}}</label>
+                        {%else%}
+                        <label style="margin:15px"><input type="checkbox" name="usb" value={{item}} {%if item == 'ntb' %}disabled="true"{%endif%}>&nbsp;&nbsp;{{item}}</label>
+                        {%endif%}
+                        {%endfor%}
+<!--                        <label style="margin:30px">
+                            <button class="btn btn-info">Save</button>
+                        </label>-->
+                    </div>
+                    </div>
+                    </span>
+                </form>
+                </div>
+                <div><p class={{flag}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{flash}}</p></div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+<div id="hidebg" style="height:100%;" onClick="hide();"></div>
+<div id="hidebox">
+    <div class="row">
+        <div class="col-12">
+            <div class="card" style="width:100%" id="card">
+                <div class="card-block" align="center">
+                    <h4>New settings will take effect after reboot .</h4>
+                </div>
+                <div align="center">
+                    Would you like to reboot this compute stick ?
+                    <a href={%url 'webapp:reboot' %} class="btn pull-center hidden-sm-down btn-info" id="reboot">Yes</a>
+                    &nbsp;&nbsp;<a href={%url 'webapp:usbfunction' %} class="btn pull-center hidden-sm-down btn-info">No</a>
+                </div>
+                <br/>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="/static/assets/plugins/jquery/jquery.min.js"></script>
+<script>
+function show()  //显示隐藏层和弹出层
+{
+   var hideobj=document.getElementById("hidebg");
+   hidebg.style.display="block";  //显示隐藏层
+   hidebg.style.height="1000px";  //设置隐藏层的高度为当前页面高度
+   document.getElementById("hidebox").style.display="block";  //显示弹出层
+}
+function hide()  //去除隐藏层和弹出层
+{
+   document.getElementById("hidebg").style.display="none";
+   document.getElementById("hidebox").style.display="none";
+}
+window.onload=function (){
+    var flash = '{{ flash|safe }}';
+    if(flash != ''){
+        show();
+    }
+
+}
+</script>
+{%endblock%}

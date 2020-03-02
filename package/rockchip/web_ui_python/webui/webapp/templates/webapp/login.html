@@ -1,0 +1,147 @@
+{% load staticfiles %}
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Hello Toybrick</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="/static/login/assets/vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="/static/login/assets/vendors/iconfonts/ionicons/css/ionicons.css">
+    <link rel="stylesheet" href="/static/login/assets/vendors/iconfonts/typicons/src/font/typicons.css">
+    <link rel="stylesheet" href="/static/login/assets/vendors/iconfonts/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="/static/login/assets/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="/static/login/assets/vendors/css/vendor.bundle.addons.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/static/login/assets/css/shared/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="/static/login/assets/images/favicon.png" />
+<style>
+#hidebg { 
+    position:absolute;
+    left:0px;
+    top:0px;
+    background-color:#000;
+    width:100%;  /*宽度设置为100%，这样才能使隐藏背景层覆盖原页面*/
+    height:100%;
+    filter:alpha(opacity=60);  /*设置透明度为60%*/
+    opacity:0.6;  /*非IE浏览器下设置透明度为60%*/
+    display:none;
+    z-Index:2;}
+#hidebox { 
+    position:absolute;
+    width:600px;
+    height:160px;
+    top:33%;
+    left:33%;
+    background-color:#fff;
+    display:none;
+    cursor:pointer;
+    z-Index:3;}
+#content { 
+    text-align:center;
+    cursor:pointer;
+    z-Index:1;}
+</style>
+  </head>
+  <body>
+    <div class="container-scroller">
+      <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="content-wrapper d-flex align-items-center auth auth-bg-1 theme-one">
+          <div class="row w-100">
+            <div class="col-lg-4 mx-auto">
+              <div class="auto-form-wrapper">
+                <form method="post" action="/accounts/login/">
+                  <div class="form-group">
+                    <label class="label">Username</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" placeholder="Username" name="uname" required>
+                      <div class="input-group-append">
+                        <span class="input-group-text">
+                          <i class="mdi mdi-check-circle-outline"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="label">Password</label>
+                    <div class="input-group">
+                      <input type="password" class="form-control" placeholder="Password" name="psw" required>
+                      <div class="input-group-append">
+                        <span class="input-group-text">
+                          <i class="mdi mdi-check-circle-outline"></i>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div><span style = "color:red;">{{error_mesg}}</span></div>
+                  <div class="form-group">
+                    <button class="btn btn-primary submit-btn btn-block">Login</button>
+                  </div>
+                  <div class="form-group d-flex justify-content-between">
+                    <a href="#" class="text-small forgot-password text-black" onClick="show();">Forgot Password?&nbsp;&nbsp;Restore factory settings</a>
+                  </div>
+                </form>
+            </div>
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <div id="hidebg" style="height:100%;" ></div>
+    <div id="hidebox" class="auto-form-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <div class="card" style="width:100%" id="card">
+                    <div class="card-block" align="center">
+                    </div>
+                    <div align="center">
+                        <br/>
+                        <br/>
+                        <h4>Would you like to restore factory settings ?</h4>
+                        <br/>
+                        <div>
+                        <span><a href={%url 'webapp:restore_factory_settings' %} class="btn pull-center hidden-sm-down btn-info" id="reboot">Yes</a>
+                        &nbsp;&nbsp;<a href={%url 'webapp:index' %} class="btn pull-center hidden-sm-down btn-info">No</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="/static/login/assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="/static/login//assets/vendors/js/vendor.bundle.addons.js"></script>
+    <!-- endinject -->
+    <!-- inject:js -->
+    <script src="/static/login/assets/js/shared/off-canvas.js"></script>
+    <script src="/static/login/assets/js/shared/misc.js"></script>
+    <!-- endinject -->
+<script>
+function show()  //显示隐藏层和弹出层
+{
+   var hideobj=document.getElementById("hidebg");
+   hidebg.style.display="block";  //显示隐藏层
+   hidebg.style.height="1000px";  //设置隐藏层的高度为当前页面高度
+   document.getElementById("hidebox").style.display="block";  //显示弹出层
+}
+function hide()  //去除隐藏层和弹出层
+{
+   document.getElementById("hidebg").style.display="none";
+   document.getElementById("hidebox").style.display="none";
+}
+window.onload=function (){
+    var flash = '{{ flash|safe }}';
+    if(flash != ''){
+        show();
+    }
+
+}
+</script>
+  </body>
+</html>

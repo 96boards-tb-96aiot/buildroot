@@ -1,0 +1,73 @@
+{%extends "webapp/base.html"%}
+{% load staticfiles %}
+{%block content%}
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="row">
+        <!-- Column -->
+        <div class="col-lg-4 col-xlg-3 col-md-5">
+            <div class="card">
+                <div class="card-block">
+                    <center class="m-t-30"> <img src="/static/assets/images/{{request.user.avatar}}" class="img-circle" width="150" />
+                        <h4 class="card-title m-t-10">{{request.user}}</h4>
+                        <h6 class="card-subtitle">{{request.user}}</h6>
+                    </center>
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+        <!-- Column -->
+        <div class="col-lg-8 col-xlg-9 col-md-7">
+            <div class="card">
+                <form method="post" class="form-horizontal form-material" action="#">
+                {% csrf_token %}
+                <div class="card-block">
+                        <div class="form-group">
+                            <a href={%url 'webapp:network_setting' "1" %} class="btn pull-right hidden-sm-down btn-info">Settings</a>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12">IP Address:</label>
+                            <div class="col-md-12">
+                                <input type="text" value={{webip}} class="form-control form-control-line" name ="webip" readOnly="true" required>
+                            </div>
+                            <br/>
+                            {%if ip%}
+                            <div class="col-md-12">
+                                <input type="text" value={{ip}} class="form-control form-control-line" name ="ip" readOnly="true" required>
+                            </div>
+                            {%endif%}
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12">Gateway:</label>
+                            <div class="col-md-12">
+                                <input type="text" value={{gateway}} class="form-control form-control-line" name ="gateway" readOnly="true"  required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12">DNS:</label>
+                            {%if dns1%}
+                            <div class="col-md-12">
+                                <input type="text" value={{dns1}} class="form-control form-control-line" name ="dns1" readOnly="true" required>
+                            </div>
+                            {%endif%}
+                            {%if dns2%}
+                            <br/>
+                            <div class="col-md-12">
+                                <input type="text" value={{dns2}} class="form-control form-control-line" name ="dns2" readOnly="true" required>
+                            </div>
+                            {%endif%}
+                        </div>
+                        <p class={{flag}}>{{flash}}</p>
+                </div>
+                </form>
+            </div>
+        </div>
+        <!-- Column -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+</div>
+{%endblock%}

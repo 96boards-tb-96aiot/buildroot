@@ -1,0 +1,195 @@
+{%extends "webapp/base.html"%}
+{% load staticfiles %}
+{%block content%}
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="row">
+        <!-- Column -->
+        <div class="col-lg-4 col-xlg-3 col-md-5">
+            <div class="card">
+                <div class="card-block">
+                    <center class="m-t-30"> <img src="/static/assets/images/{{request.user.avatar}}" class="img-circle" width="150" />
+                        <h4 class="card-title m-t-10">{{request.user}}</h4>
+                        <h6 class="card-subtitle">{{request.user}}</h6>
+                    </center>
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+        <!-- Column -->
+        <div class="col-lg-8 col-xlg-9 col-md-7">
+            <div class="card" id="dhcpblock" style="display:none">
+                <div class="card-block">
+                    <form method="post" class="form-horizontal form-material" action={%url "webapp:dhcp_setting" %}>
+                        {% csrf_token %}
+                        <label style="margin:15px"><input type="checkbox" id="dhcp_on" {%if dhcp_switch == 'on' %}checked=""{%endif%} name="dhcp" value="dhcp" >&nbsp;&nbsp;dhcp</label>
+                        <hr/>
+                        <div class="form-group">
+                            <label class="col-md-12">IP Address:</label>
+                            <div class="col-md-12">
+                                <input type="text" value="" class="form-control form-control-line" name ="ip" readOnly="true">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12">Gateway:</label>
+                            <div class="col-md-12">
+                                <input type="text" value="" class="form-control form-control-line" name ="gateway" readOnly="true">
+                            </div>
+                        </div>
+                        {%if dns1%}
+                        <div class="form-group">
+                            <label class="col-md-12">DNS1:</label>
+                            <div class="col-md-12">
+                                <input type="text" value="" class="form-control form-control-line" name ="dns1" readOnly="true">
+                            </div>
+                        </div>
+                        {%endif%}
+                        {%if dns2%}
+                        <div class="form-group">
+                            <label class="col-md-12">DNS2:</label>
+                            <div class="col-md-12">
+                                <input type="text" value="" class="form-control form-control-line" name ="dns2" readOnly="true">
+                            </div>
+                        </div>
+                        {%endif%}
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <button class="btn btn-info">Save</button>
+                            </div>
+                        </div>
+                        <p class={{flag}}>{{flash}}</p>
+                    </form>
+                </div>
+            </div>
+            <div class="card" id="staticblock" style="display:none">
+                <div class="card-block">
+                    <form method="post" class="form-horizontal form-material" action={%url "webapp:network_setting" '1' %}>
+                        {% csrf_token %}
+                        <label style="margin:15px"><input type="checkbox" id="dhcp_off" {%if dhcp_switch == 'on' %}checked=""{%endif%} name="dhcp" value="dhcp" >&nbsp;&nbsp;dhcp</label>
+                        <hr/>
+                        <div class="form-group">
+                            <label class="col-md-12">IP Address:</label>
+                            <div class="col-md-12">
+                                <input type="text" value={{ip}} class="form-control form-control-line" name ="ip" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12">Gateway:</label>
+                            <div class="col-md-12">
+                                <input type="text" value={{gateway}} class="form-control form-control-line" name ="gateway" required>
+                            </div>
+                        </div>
+                        {%if dns1%}
+                        <div class="form-group">
+                            <label class="col-md-12">DNS1:</label>
+                            <div class="col-md-12">
+                                <input type="text" value={{dns1}} class="form-control form-control-line" name ="dns1" required>
+                            </div>
+                        </div>
+                        {%endif%}
+                        {%if dns2%}
+                        <div class="form-group">
+                            <label class="col-md-12">DNS2:</label>
+                            <div class="col-md-12">
+                                <input type="text" value={{dns2}} class="form-control form-control-line" name ="dns2" required>
+                            </div>
+                        </div>
+                        {%endif%}
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <button class="btn btn-info">Save</button>
+                            </div>
+                        </div>
+                        <p class={{flag}}>{{flash}}</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+<div id="hidebg" style="height:100%;" onClick="hide();"></div>
+<div id="hidebox">
+    <div class="row">
+        <div class="col-12">
+            <div class="card" style="width:100%" id="card">
+                <div class="card-block" align="center">
+                    <h4>New settings will take effect after reboot .</h4>
+                </div>
+                <div align="center">
+                    Would you like to reboot this compute stick ?
+                    <a href={%url 'webapp:reboot' %} class="btn pull-center hidden-sm-down btn-info" id="reboot">Yes</a>
+                    &nbsp;&nbsp;<a href={%url 'webapp:network' %} class="btn pull-center hidden-sm-down btn-info">No</a>
+                </div>
+                <br/>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="/static/assets/plugins/jquery/jquery.min.js"></script>
+<script>
+function show()  //显示隐藏层和弹出层
+{
+   var hideobj=document.getElementById("hidebg");
+   hidebg.style.display="block";  //显示隐藏层
+   hidebg.style.height="1000px";  //设置隐藏层的高度为当前页面高度
+   document.getElementById("hidebox").style.display="block";  //显示弹出层
+}
+function hide()  //去除隐藏层和弹出层
+{
+   document.getElementById("hidebg").style.display="none";
+   document.getElementById("hidebox").style.display="none";
+}
+function dhcp_show()
+{
+    var staticobj=document.getElementById("staticblock");
+    staticobj.style.display="none";
+    var dhcpobj=document.getElementById("dhcpblock");
+    dhcpobj.style.display="block";
+}
+function static_show()
+{
+    var dhcpobj=document.getElementById("dhcpblock");
+    dhcpobj.style.display="none";
+    var staticobj=document.getElementById("staticblock");
+    staticobj.style.display="block";
+}
+function check_dhcp()
+{
+    if(document.getElementById("staticblock").style.display == "block"){
+		var checkbox = document.getElementById("dhcp_off");
+		document.getElementById("dhcp_on").checked = checkbox.checked;
+		document.getElementById("dhcp_off").checked = checkbox.checked;
+	}
+	else if(document.getElementById("dhcpblock").style.display == "block"){
+		var checkbox = document.getElementById("dhcp_on");
+		document.getElementById("dhcp_on").checked = checkbox.checked;
+		document.getElementById("dhcp_off").checked = checkbox.checked;
+	}
+	else{
+		var checkbox = document.getElementById("dhcp_on");
+		document.getElementById("dhcp_on").checked = checkbox.checked;
+		document.getElementById("dhcp_off").checked = checkbox.checked;
+	}
+    if(checkbox.checked){
+        dhcp_show();
+    }else{
+        console.log("check_dhcp2");
+        static_show();
+    }
+}
+window.onload=function (){
+    setInterval(check_dhcp,200);
+    var flash = '{{ flash|safe }}';
+    if(flash != ''){
+        show();
+    }
+
+}
+</script>
+{%endblock%}

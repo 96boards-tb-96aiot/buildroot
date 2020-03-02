@@ -1,0 +1,96 @@
+{%extends "webapp/base.html"%}
+{% load staticfiles %}
+{%block content%}
+<!-- Container fluid  -->
+<!-- ============================================================== -->
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+            <h3 class="text-themecolor m-b-0 m-t-0">Work Mode</h3>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+                <li class="breadcrumb-item active">Work Mode</li>
+            </ol>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Bread crumb and right sidebar toggle -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-block">
+                    <div>Current Work Mode:&nbsp;&nbsp;<span style="color:#84C1FF;">{{mymode}}</span></div>
+                    <hr>
+                    <br>
+                    <form method="post" class="form-horizontal" enctype="multipart/form-data" action="{%url 'webapp:setmode' %}">
+                    {% csrf_token %}
+                    <span>Work Mode&nbsp;&nbsp;&nbsp;<select id="select" name="select" class="selectpicker show-tick form-control" style="width:40%;">
+                    <option value="master" {% if mymode == "master" %} selected {% endif %} >master</option>
+                    <option value="slave" {% if mymode == "slave" %} selected {% endif %} >slave</option>
+                    </select>
+                    &nbsp;&nbsp;
+                    <button type="submit" class="btn btn-info">Save</button></span>
+                    </form>
+                </div>
+                <div><span class={{flag}}>&nbsp;&nbsp;&nbsp;&nbsp;{{flash}}</span></div>
+                <br>
+            </div>
+        </div>
+    </div>
+<div id="hidebg" style="height:100%;" onClick="hide();"></div>
+<div id="hidebox">
+    <div class="row">
+        <div class="col-12">
+            <div class="card" style="width:100%" id="card">
+                <div class="card-block" align="center">
+                    <h4>New settings will take effect after reboot .</h4>
+                </div>
+                <div align="center">
+                    Would you like to reboot this compute stick ?
+                    <a href={%url 'webapp:reboot' %} class="btn pull-center hidden-sm-down btn-info" id="reboot">Yes</a>
+                    &nbsp;&nbsp;<a href={%url 'webapp:workmode' %} class="btn pull-center hidden-sm-down btn-info">No</a>
+                </div>
+                <br/>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+</div>
+<!-- ============================================================== -->
+<!-- End Container fluid  -->
+
+
+<script src="/static/assets/plugins/jquery/jquery.min.js"></script>
+<script>
+function show()  //显示隐藏层和弹出层
+{
+   var hideobj=document.getElementById("hidebg");
+   hidebg.style.display="block";  //显示隐藏层
+   hidebg.style.height="1000px";  //设置隐藏层的高度为当前页面高度
+   document.getElementById("hidebox").style.display="block";  //显示弹出层
+}
+function hide()  //去除隐藏层和弹出层
+{
+   document.getElementById("hidebg").style.display="none";
+   document.getElementById("hidebox").style.display="none";
+}
+window.onload=function (){
+    var flash = '{{ flash|safe }}';
+    if(flash != ''){
+        show();
+    }
+
+}
+</script>
+
+{%endblock%}

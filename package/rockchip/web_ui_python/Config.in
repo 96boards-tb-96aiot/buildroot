@@ -1,0 +1,4 @@
+config BR2_PACKAGE_WEB_UI_PYTHON
+	bool "web_ui_python"
+	help
+		All  files for web ui python 
