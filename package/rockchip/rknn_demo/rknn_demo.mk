@@ -7,6 +7,7 @@
 RKNN_DEMO_VERSION = 1.0.0
 RKNN_DEMO_SITE = $(TOPDIR)/../external/rknn_demo
 RKNN_DEMO_SITE_METHOD = local
+APP_INIT_FILE = S99_APP_init
 RKNN_DEMO_DEPENDENCIES = jpeg libpng12 libv4l linux-rga minigui camera_engine_rkisp libdrm mpp uvc_app libcurl sqlite
 
 ifeq ($(BR2_PACKAGE_RK1808),y)
@@ -19,6 +20,7 @@ ifeq ($(BR2_PACKAGE_RK3399PRO),y)
 define RKNN_DEMO_BUILD_CMDS
 		$(INSTALL) -D -m 0644 $(@D)/rknn/rknn_api/librknn_api.so $(TARGET_DIR)/usr/lib
 		$(INSTALL) -D -m 0644 $(@D)/rknn/rknn_api/librknn_api.so $(STAGING_DIR)/usr/lib
+		$(INSTALL) -D -m 0755 $(@D)/$(APP_INIT_FILE) $(TARGET_DIR)/etc/init.d/S99_APP_init
 		$(TARGET_MAKE_ENV) $($(PKG)_MAKE_ENV) $($(PKG)_MAKE) $($(PKG)_MAKE_OPTS) -C $($(PKG)_BUILDDIR)
 endef
 endif

@@ -6,7 +6,8 @@
 case "$1" in
   start)
 	printf "Starting web server: "
-	python /var/webui/manage.py runserver 192.168.168.168:80 &
+	cd /usr/lib/webui/
+	python manage.py runserver 192.168.168.168:80 &
 	[ $? = 0 ] && echo "OK" || echo "FAIL"
 	;;
   stop)
