@@ -5,10 +5,7 @@ from Cython.Build import cythonize
 
 from setuptools.extension import Extension
 
-# mit/log.py是文件的位置，比如某个文件夹。mit.log是import的时候模块的名字
 # python setup.py build_ext --inplace
-
-# 编译成pyc python3 -m compileall -b run.py
 
 setuptools.setup(
     ext_modules=cythonize("toybrick/*.py")
