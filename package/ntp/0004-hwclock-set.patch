@@ -1,0 +1,12 @@
+diff --git a/ntpd/ntp_loopfilter.c b/ntpd/ntp_loopfilter.c
+index 8d44fb1..516fa78 100644
+--- a/ntpd/ntp_loopfilter.c
++++ b/ntpd/ntp_loopfilter.c
+@@ -518,6 +518,7 @@ local_clock(
+ 		}
+ 		record_loop_stats(fp_offset, drift_comp, clock_jitter,
+ 		    clock_stability, sys_poll);
++		system("hwclock -w");
+ 		exit (0);
+ 	}
+ 

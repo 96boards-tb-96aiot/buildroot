@@ -3,6 +3,7 @@
 # Do some initialzation for Rockchip Linux SDK....
 #
 
+hwclock -s
 case "$1" in
 start)
 	echo "Welcome to Rockchip Linux SDK"
