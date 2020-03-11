@@ -3,7 +3,18 @@
 # Do some initialzation for Rockchip Linux SDK....
 #
 
+judge_date_err()
+{
+    year=`date +%Y`
+    if [ $year -lt 2020 ]; then
+        echo "date [$year] error! temporarily set to 20200301!"
+        date -s 20200301
+    fi
+}
+
 hwclock -s
+judge_date_err
+
 case "$1" in
 start)
 	echo "Welcome to Rockchip Linux SDK"
