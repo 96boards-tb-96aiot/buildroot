@@ -13,7 +13,6 @@ ifeq ($(BR2_PACKAGE_RK1808),y)
 	RKNN_DEMO_CONF_OPTS += -DNEED_RKNNAPI=0
 	RKNN_DEMO_DEPENDENCIES += rknpu
 define RKNN_DEMO_BUILD_CMDS
-		$(INSTALL) -D -m 755 package/rockchip/rknn_demo/S99_APP_init  $(TARGET_DIR)/etc/init.d/
 		$(TARGET_MAKE_ENV) $($(PKG)_MAKE_ENV) $($(PKG)_MAKE) $($(PKG)_MAKE_OPTS) -C $($(PKG)_BUILDDIR)
 endef
 endif
